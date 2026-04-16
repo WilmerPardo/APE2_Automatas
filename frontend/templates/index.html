@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica Nro 2: Autómatas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        h1 { color: #333; }
+        .container { display: flex; gap: 20px; }
+        .form-section, .result-section { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); flex: 1; }
+        select, input, button { width: 100%; margin-top: 10px; padding: 10px; box-sizing: border-box; }
+        button { background: #0056b3; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #004494; }
+        .hidden { display: none; }
+        #output { background: #eee; padding: 10px; min-height: 100px; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+
+    <h1>Análisis de Estructuras Formales y Clausura de Kleene</h1>
+
+    <div class="container">
+        <div class="form-section">
+            <label for="operacion">Seleccione la Operación:</label>
+            <select id="operacion" onchange="mostrarCampos()">
+                <option value="generar">1. Generación de Cadenas</option>
+                <option value="pertenece">2. Pertenencia</option>
+                <option value="union">3. Unión de Lenguajes</option>
+                <option value="concatenacion">4. Concatenación</option>
+                <option value="kleene_star">5. Clausura de Kleene (L*)</option>
+                <option value="kleene_plus">6. Kleene Plus (L+)</option>
+                <option value="crecimiento">7. Crecimiento del Lenguaje</option>
+            </select>
+
+            <div id="div-alfabeto">
+                <input type="text" id="alfabeto" placeholder="Alfabeto (ej: 0, 1)">
+                <input type="number" id="max_len" placeholder="Longitud máxima (n)">
+            </div>
+
+            <div id="div-lenguaje" class="hidden">
+                <input type="text" id="lenguaje" placeholder="Lenguaje (ej: aa, bb)">
+                <input type="text" id="cadena" placeholder="Cadena a evaluar" class="hidden">
+                <input type="number" id="max_iter" placeholder="Iteraciones máximas" class="hidden">
+            </div>
+
+            <div id="div-doble-lenguaje" class="hidden">
+                <input type="text" id="l1" placeholder="Lenguaje 1 (ej: a, b)">
+                <input type="text" id="l2" placeholder="Lenguaje 2 (ej: 0, 1)">
+            </div>
+
+            <button onclick="ejecutarOperacion()">Ejecutar</button>
+        </div>
+
+        <div class="result-section">
+            <h3>Resultados Esperados:</h3>
+            <div id="output">Esperando ejecución...</div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarCampos() {
+            const op = document.getElementById('operacion').value;
+            
+            // Ocultar todos primero
+            document.getElementById('div-alfabeto').classList.add('hidden');
+            document.getElementById('div-lenguaje').classList.add('hidden');
+            document.getElementById('div-doble-lenguaje').classList.add('hidden');
+            document.getElementById('cadena').classList.add('hidden');
+            document.getElementById('max_iter').classList.add('hidden');
+
+            // Mostrar según operación
+            if(op === 'generar') {
+                document.getElementById('div-alfabeto').classList.remove('hidden');
+            } else if(op === 'pertenece') {
+                document.getElementById('div-lenguaje').classList.remove('hidden');
+                document.getElementById('cadena').classList.remove('hidden');
+            } else if(op === 'union' || op === 'concatenacion') {
+                document.getElementById('div-doble-lenguaje').classList.remove('hidden');
+            } else if(op === 'kleene_star' || op === 'kleene_plus') {
+                document.getElementById('div-lenguaje').classList.remove('hidden');
+                document.getElementById('max_iter').classList.remove('hidden');
+            } else if(op === 'crecimiento') {
+                document.getElementById('div-lenguaje').classList.remove('hidden');
+            }
+        }
+
+        async function ejecutarOperacion() {
+            const operacion = document.getElementById('operacion').value;
+            const data = { operacion: operacion };
+
+            // Recolectar datos según la operación visible
+            if(operacion === 'generar') {
+                data.alfabeto = document.getElementById('alfabeto').value;
+                data.max_len = document.getElementById('max_len').value;
+            } else if(operacion === 'pertenece') {
+                data.lenguaje = document.getElementById('lenguaje').value;
+                data.cadena = document.getElementById('cadena').value;
+            } else if(operacion === 'union' || operacion === 'concatenacion') {
+                data.l1 = document.getElementById('l1').value;
+                data.l2 = document.getElementById('l2').value;
+            } else if(operacion === 'kleene_star' || operacion === 'kleene_plus') {
+                data.lenguaje = document.getElementById('lenguaje').value;
+                data.max_iter = document.getElementById('max_iter').value;
+            } else if(operacion === 'crecimiento') {
+                data.lenguaje = document.getElementById('lenguaje').value;
+            }
+
+            // Llamada al Backend
+            try {
+                const response = await fetch('/api/ejecutar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                const outputDiv = document.getElementById('output');
+                
+                if(result.error) {
+                    outputDiv.innerHTML = `<span style="color:red">Error: ${result.error}</span>`;
+                } else {
+                    // Mostrar arrays como listas separadas por comas
+                    if (Array.isArray(result.resultado)) {
+                        outputDiv.innerHTML = "{" + result.resultado.join(', ') + "}";
+                    } else {
+                        outputDiv.innerHTML = result.resultado;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
