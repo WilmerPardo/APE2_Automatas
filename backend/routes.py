@@ -1,9 +1,4 @@
-"""
-routes.py
----------
-Blueprint con los endpoints de la API REST.
-Cada operación delega la lógica a lenguajes.py.
-"""
+#endpoints
 
 from flask import Blueprint, request, jsonify
 from lenguajes import (
@@ -19,9 +14,6 @@ from lenguajes import (
 api = Blueprint("api", __name__)
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
 
 def _parse_lista(texto: str) -> list[str]:
     """Convierte una cadena separada por comas en una lista limpia."""
@@ -39,10 +31,7 @@ OPERACIONES = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Endpoint principal
-# ---------------------------------------------------------------------------
-
+#principal
 @api.route("/api/ejecutar", methods=["POST"])
 def ejecutar():
     """
@@ -65,10 +54,7 @@ def ejecutar():
         return jsonify({"error": str(e)}), 500
 
 
-# ---------------------------------------------------------------------------
-# Despachador de operaciones
-# ---------------------------------------------------------------------------
-
+#despachador
 def _despachar(operacion: str, data: dict):
     """Selecciona y ejecuta la función correspondiente a la operación."""
 
