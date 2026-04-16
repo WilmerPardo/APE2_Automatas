@@ -4,17 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Práctica Nro 2: Autómatas</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
-        h1 { color: #333; }
-        .container { display: flex; gap: 20px; }
-        .form-section, .result-section { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); flex: 1; }
-        select, input, button { width: 100%; margin-top: 10px; padding: 10px; box-sizing: border-box; }
-        button { background: #0056b3; color: white; border: none; cursor: pointer; font-weight: bold; }
-        button:hover { background: #004494; }
-        .hidden { display: none; }
-        #output { background: #eee; padding: 10px; min-height: 100px; word-wrap: break-word; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 

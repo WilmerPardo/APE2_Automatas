@@ -13,9 +13,10 @@ from routes import api
 # Configuración de Flask
 # ---------------------------------------------------------------------------
 
-TEMPLATE_DIR = os.path.abspath("../Frontend/templates")
+TEMPLATE_DIR = os.path.abspath("../frontend/templates")
+STATIC_DIR  = os.path.abspath("../frontend/static")
 
-app = Flask(__name__, template_folder=TEMPLATE_DIR)
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 app.register_blueprint(api)
 
 
