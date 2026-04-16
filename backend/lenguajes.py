@@ -7,22 +7,20 @@ Metodología de la práctica de Autómatas.
 
 
 def generar_cadenas(alfabeto: list[str], max_len: int):
-    """
-    Generar todas las cadenas sobre Σ hasta longitud n.
-    """
+    #Generar todas las cadenas sobre Σ hasta longitud n
     resultado = [""]   # cadena vacía (épsilon)
     nuevas    = [""]
 
     for _ in range(max_len):
         temp = []
-        for cadena in nuevas:           # recorre las cadenas del nivel anterior
-            for simbolo in alfabeto:    # agrega cada símbolo del alfabeto al final
+        for cadena in nuevas:           
+            for simbolo in alfabeto:    
                 temp.append(cadena + simbolo)
         #temp = [cadena + simbolo for cadena in nuevas for simbolo in alfabeto] # forma compacta
         resultado.extend(temp)
         nuevas = temp
 
-    # Eliminar duplicados manteniendo el orden
+    #eliminar duplicados
     final = []
     for elemento in resultado:
         if elemento not in final:
@@ -74,10 +72,10 @@ def kleene_star(L: list[str], max_iter: int):
                 nuevo.append(cadena)     
 
         for elemento in nuevo:           
-            if elemento not in resultado:    # SI elemento NO ESTÁ en resultado
-                resultado.append(elemento)   # AGREGAR elemento A resultado
+            if elemento not in resultado:    #SI elemento no esta en resultado
+                resultado.append(elemento)   #agregarlo
 
-        actual = nuevo                   # actual ← nuevo
+        actual = nuevo                  
 
     return resultado
 
@@ -97,7 +95,7 @@ def analizar_crecimiento(L: list[str]):
     crecimiento = []
     for i in range(1, 6):
         resultado = kleene_star(L, i)
-        print(resultado)
+        #print(resultado)
         crecimiento.append({
             "iteracion": i,
             "cantidad": len(resultado)
