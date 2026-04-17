@@ -1,11 +1,3 @@
-"""
-lenguajes.py
-------------
-Algoritmos de operaciones sobre lenguajes formales.
-Metodología de la práctica de Autómatas.
-"""
-
-
 def generar_cadenas(alfabeto: list[str], max_len: int):
     #Generar todas las cadenas sobre Σ hasta longitud n
     resultado = [""]   # cadena vacía (épsilon)

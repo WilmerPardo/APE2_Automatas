@@ -1,5 +1,4 @@
 #endpoints
-
 from flask import Blueprint, request, jsonify
 from lenguajes import (
     generar_cadenas,
